@@ -2,7 +2,6 @@ const PolicyNumber = require('../model/PolicyNumber')
 const { customAlphabet } = require('nanoid')
 
 exports.generatePolicy = async (req, res) => {
-
   // mongodb://127.0.0.1:27017/turtlefin?compressors=disabled&gssapiServiceName=mongodb
   
   console.log('starting script')
