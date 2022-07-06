@@ -1,0 +1,9 @@
+Connected to database !
+server is running at 4000
+starting script
+---------------
+db.createCollection("policyNumbers");
+db.policyNumbers.insert({"policyId": "O04ABM93353WA", "isAvailable" : true});
+---------------
+ending script
+Execution time: 0.038 seconds.
