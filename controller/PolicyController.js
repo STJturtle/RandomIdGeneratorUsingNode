@@ -1,4 +1,7 @@
+const axios = require("axios").default;
 const PolicyNumber = require('../model/PolicyNumber')
+const PolicyNumberCheck = require('../model/PolicyNumberCheck')
+
 const { customAlphabet } = require('nanoid')
 
 exports.generatePolicy = async (req, res) => {
@@ -10,7 +13,7 @@ exports.generatePolicy = async (req, res) => {
   console.log('db.createCollection("policyNumbers");')
   var start = new Date().getTime();
   
-  for (let i = 0; i < 1000000; i++) {
+  for (let i = 0; i < 200000; i++) {
       // const nanoid  = customAlphabet('1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', 13);
       const nanoid  = customAlphabet('1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ', 13);
       const policyId = nanoid()
@@ -31,3 +34,30 @@ exports.generatePolicy = async (req, res) => {
     greeting: `policy id saved!`,
   });
 };
+
+exports.fetchPolicy = async (req, res) => {
+
+  await generatePolicyNumber()
+    
+  res.status(200).json({
+    success: true,
+    greeting: `policy id saved in another table!`,
+  });
+};
+
+async function generatePolicyNumber() {
+
+  await axios
+      .get(
+          `http://localhost:9098/api/minterprise/v1/products/hospicash/policies/randomPolicyNumber?insurerCode=HDFC`
+      )
+      .then(async (response) => {
+          // console.log("response -- > " + (response.data));
+          const policyId = response.data
+          await PolicyNumberCheck.create({policyId: policyId, isAvailable: false})
+          console.log(`policy number -------> ${policyId}`)
+      })
+      .catch(function (error) {
+          console.log("error"+ error);
+      });
+}
